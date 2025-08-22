@@ -59,10 +59,12 @@ if uploaded_file is not None:
     sil_score = silhouette_score(X_scaled, df['Cluster'])
     st.sidebar.write(f"📈 Silhouette Score: {sil_score:.3f}")
 
-    # Cluster Summary
+    # Cluster Summary (numeric only)
     st.write("### 📊 Cluster Summary (mean values)")
-    st.dataframe(df.groupby("Cluster").mean())
+    numeric_cols = df.select_dtypes(include=np.number).columns
+    st.dataframe(df.groupby("Cluster")[numeric_cols].mean())
 
+    
     # PCA for visualization
     pca = PCA(n_components=2)
     reduced = pca.fit_transform(X_scaled)
